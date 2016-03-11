@@ -1,9 +1,8 @@
 package com.iceoton.managesqlite.sqlite;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import com.iceoton.managesqlite.model.Busstop;
+
+import java.sql.*;
 import java.util.Scanner;
 
 public class SQLiteDAO {
@@ -18,6 +17,14 @@ public class SQLiteDAO {
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
+        }
+    }
+
+    public void closeConnection(){
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -43,7 +50,6 @@ public class SQLiteDAO {
             }
             rs.close();
             stmt.close();
-            connection.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
@@ -60,13 +66,31 @@ public class SQLiteDAO {
             }
             rs.close();
             stmt.close();
-            connection.close();
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
         return stopList;
+    }
+
+    public Busstop getBusStop(int Id){
+        Busstop busstop = null;
+        String sql = "SELECT * FROM busstop WHERE id=" + Id;
+        try{
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            if(rs.next()){
+                busstop = new Busstop();
+                busstop.fromResultSet(rs);
+            }
+            rs.close();
+            statement.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return busstop;
     }
 
 
