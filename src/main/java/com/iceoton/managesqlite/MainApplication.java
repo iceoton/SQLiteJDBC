@@ -52,7 +52,6 @@ public class MainApplication {
             System.out.println(out);
         }
 
-
         dao.closeConnection();
     }
 
